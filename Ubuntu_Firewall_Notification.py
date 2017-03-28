@@ -7,7 +7,7 @@ from gi.repository import Notify
 from gi.repository import Gtk
 from subprocess import *
 
-# définition de la callback exécutée lors du clic sur le bouton
+# Define callback executed on mouse click
 def callback(notif_object, action_name, command):
     sp = Popen("sudo -i ls /", shell = True, stdin = PIPE, stdout = PIPE, stderr = PIPE)
     out, err = sp.communicate()
@@ -43,16 +43,16 @@ for line in tail("-f", "-n0", "/var/log/ufw.log", _iter=True):
 
     Notify.init('Ubuntu Firewall Notification')
     notif = Notify.Notification.new(
-        "Firewall has been bloqued a paquet", # titre
+        "Firewall has been bloqued a paquet", # title
         command, # message
-        'dialog-information' # icône
+        'dialog-information' # icon
     )
-    # ajout de notre action sur la notification
+    # add the custom notification action
     notif.add_action(
-        'our_callback', # identifiant
-        'Allow the traffic', # texte du bouton
+        'our_callback',
+        'Allow traffic', # Button text
         callback, # function callback de notre bouton
-        #None, # user_datas, ce dont vous avez besoin dans la callback
+        # None, # user_data, required data for the callback, For now: nothing
         command # fonction qui supprime les user_datas
     )
     notif.show()
