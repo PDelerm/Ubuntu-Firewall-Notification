@@ -16,6 +16,7 @@ def callback(notif_object, action_name, command):
     notif_object.close()
     Gtk.main_quit()
 
+# Define a parsing fonction to get value of the name parameter
 def parsing(name, line):
     try:
         lineList = line.split(name)
@@ -43,7 +44,7 @@ for line in tail("-f", "-n0", "/var/log/ufw.log", _iter=True):
 
     Notify.init('Ubuntu Firewall Notification')
     notif = Notify.Notification.new(
-        "Firewall has been bloqued a paquet", # title
+        "A packet has been bloqued by the firewall", # title
         command, # message
         'dialog-information' # icon
     )
