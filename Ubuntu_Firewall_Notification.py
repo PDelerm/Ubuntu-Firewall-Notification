@@ -27,34 +27,38 @@ def parsing(name, line):
         result = None
     return result
 
-for line in tail("-f", "-n0", "/var/log/ufw.log", _iter=True):
-    interface = parsing("IN=", line)
-    out = parsing("OUT=", line)
-    mac = parsing("MAC=", line)
-    src = parsing("SRC=", line)
-    dst = parsing("DST=", line)
-    proto = parsing("PROTO=", line)
-    spt = parsing("SPT=", line)
-    dpt = parsing("DPT=", line)
+try:
+    for line in tail("-f", "-n0", "/var/log/ufw.log", _iter=True):
+        interface = parsing("IN=", line)
+        out = parsing("OUT=", line)
+        mac = parsing("MAC=", line)
+        src = parsing("SRC=", line)
+        dst = parsing("DST=", line)
+        proto = parsing("PROTO=", line)
+        spt = parsing("SPT=", line)
+        dpt = parsing("DPT=", line)
 
-    command = "sudo ufw allow from " + interface + " to " + out + " proto " + proto
-    # sudo ufw allow from <target> to <destination> port <port number> proto <protocol name>
-    if dpt != None:
-        command = command + " port " + dpt
+        command = "sudo ufw allow from " + interface + " to " + out + " proto " + proto
+        # sudo ufw allow from <target> to <destination> port <port number> proto <protocol name>
+        if dpt != None:
+            command = command + " port " + dpt
 
-    Notify.init('Ubuntu Firewall Notification')
-    notif = Notify.Notification.new(
-        "A packet has been bloqued by the firewall", # title
-        command, # message
-        'dialog-information' # icon
-    )
-    # add the custom notification action
-    notif.add_action(
-        'our_callback',
-        'Allow traffic', # Button text
-        callback, # function callback de notre bouton
-        # None, # user_data, required data for the callback, For now: nothing
-        command # fonction qui supprime les user_datas
-    )
-    notif.show()
-    Gtk.main()
+        Notify.init('Ubuntu Firewall Notification')
+        notif = Notify.Notification.new(
+            "A packet has been bloqued by the firewall", # title
+            command, # message
+            'dialog-information' # icon
+        )
+        # add the custom notification action
+        notif.add_action(
+            'our_callback',
+            'Allow traffic', # Button text
+            callback, # function callback de notre bouton
+            # None, # user_data, required data for the callback, For now: nothing
+            command # fonction qui supprime les user_datas
+        )
+        notif.show()
+        Gtk.main()
+
+except IOError:
+    print Impossible to open file
