@@ -2,6 +2,7 @@
 
 Windows-Like firewall status notifications for Ubuntu
 
-Depends: python-sh
+Depends:  python-sh
+          python-parse
 
 
