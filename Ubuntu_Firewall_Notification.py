@@ -23,12 +23,12 @@ def callback(notif_object, action_name, command):
 # time > 0 -> add rules for time minutes
 def callback2(notif_object, action_name, command, time):
     if time == 0 :
-    	sp = Popen("gksudo ls /", shell = True, stdout = PIPE, stderr = PIPE)
+    	sp = Popen("gksudo " + command, shell = True, stdout = PIPE, stderr = PIPE)
     elif time < 0:
-        sp = Popen("gksudo ls /", shell = True, stdout = PIPE, stderr = PIPE)
+        sp = Popen("gksudo " + command, shell = True, stdout = PIPE, stderr = PIPE)
     else:
         command = "gksudo iptables -A " + command + "; sleep " + str(60 * time) + "; sudo iptables -D " + command
-        sp = Popen("gksudo ls /", shell = True, stdout = PIPE, stderr = PIPE)
+        sp = Popen("gksudo " + command, shell = True, stdout = PIPE, stderr = PIPE)
     print command
     out, err = sp.communicate()
     print out.rstrip(), err.rstrip()
